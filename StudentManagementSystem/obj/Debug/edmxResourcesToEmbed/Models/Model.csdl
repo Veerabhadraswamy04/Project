@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StudentManagementDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblBatch">
+    <Key>
+      <PropertyRef Name="CourseId" />
+    </Key>
+    <Property Name="CourseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Batch" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="Year" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblRegistrations" Relationship="Self.FK_tblRegistration_tblBatch" FromRole="tblBatch" ToRole="tblRegistration" />
+  </EntityType>
+  <EntityType Name="tblCourse">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Course" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="Duration" Type="Int32" />
+    <NavigationProperty Name="tblRegistrations" Relationship="Self.FK_tblRegistration_tblRegistration" FromRole="tblCourse" ToRole="tblRegistration" />
+  </EntityType>
+  <EntityType Name="tblRegistration">
+    <Key>
+      <PropertyRef Name="RegisterId" />
+    </Key>
+    <Property Name="RegisterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="CourseId" Type="Int32" />
+    <Property Name="StudentId" Type="Int32" />
+    <Property Name="MobileNo" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblBatch" Relationship="Self.FK_tblRegistration_tblBatch" FromRole="tblRegistration" ToRole="tblBatch" />
+    <NavigationProperty Name="tblCourse" Relationship="Self.FK_tblRegistration_tblRegistration" FromRole="tblRegistration" ToRole="tblCourse" />
+  </EntityType>
+  <EntityType Name="tblUser">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_tblRegistration_tblBatch">
+    <End Role="tblBatch" Type="Self.tblBatch" Multiplicity="0..1" />
+    <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblBatch">
+        <PropertyRef Name="CourseId" />
+      </Principal>
+      <Dependent Role="tblRegistration">
+        <PropertyRef Name="CourseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblRegistration_tblRegistration">
+    <End Role="tblCourse" Type="Self.tblCourse" Multiplicity="0..1" />
+    <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCourse">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="tblRegistration">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="StudentManagementDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblBatches" EntityType="Self.tblBatch" />
+    <EntitySet Name="tblCourses" EntityType="Self.tblCourse" />
+    <EntitySet Name="tblRegistrations" EntityType="Self.tblRegistration" />
+    <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+    <AssociationSet Name="FK_tblRegistration_tblBatch" Association="Self.FK_tblRegistration_tblBatch">
+      <End Role="tblBatch" EntitySet="tblBatches" />
+      <End Role="tblRegistration" EntitySet="tblRegistrations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblRegistration_tblRegistration" Association="Self.FK_tblRegistration_tblRegistration">
+      <End Role="tblCourse" EntitySet="tblCourses" />
+      <End Role="tblRegistration" EntitySet="tblRegistrations" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

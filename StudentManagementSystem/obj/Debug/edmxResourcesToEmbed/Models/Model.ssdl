@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StudentManagementDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tblBatch">
+    <Key>
+      <PropertyRef Name="CourseId" />
+    </Key>
+    <Property Name="CourseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Batch" Type="nvarchar" MaxLength="32" />
+    <Property Name="Year" Type="nvarchar" MaxLength="64" />
+  </EntityType>
+  <EntityType Name="tblCourse">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Course" Type="nvarchar" MaxLength="32" />
+    <Property Name="Duration" Type="int" />
+  </EntityType>
+  <EntityType Name="tblRegistration">
+    <Key>
+      <PropertyRef Name="RegisterId" />
+    </Key>
+    <Property Name="RegisterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="64" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="64" />
+    <Property Name="CourseId" Type="int" />
+    <Property Name="StudentId" Type="int" />
+    <Property Name="MobileNo" Type="nvarchar" MaxLength="512" />
+  </EntityType>
+  <EntityType Name="tblUser">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="64" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="64" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="64" />
+    <Property Name="Password" Type="nvarchar" MaxLength="64" />
+  </EntityType>
+  <Association Name="FK_tblRegistration_tblBatch">
+    <End Role="tblBatch" Type="Self.tblBatch" Multiplicity="0..1" />
+    <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblBatch">
+        <PropertyRef Name="CourseId" />
+      </Principal>
+      <Dependent Role="tblRegistration">
+        <PropertyRef Name="CourseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblRegistration_tblRegistration">
+    <End Role="tblCourse" Type="Self.tblCourse" Multiplicity="0..1" />
+    <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCourse">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="tblRegistration">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="StudentManagementDBModelStoreContainer">
+    <EntitySet Name="tblBatch" EntityType="Self.tblBatch" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCourse" EntityType="Self.tblCourse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblRegistration" EntityType="Self.tblRegistration" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tblRegistration_tblBatch" Association="Self.FK_tblRegistration_tblBatch">
+      <End Role="tblBatch" EntitySet="tblBatch" />
+      <End Role="tblRegistration" EntitySet="tblRegistration" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblRegistration_tblRegistration" Association="Self.FK_tblRegistration_tblRegistration">
+      <End Role="tblCourse" EntitySet="tblCourse" />
+      <End Role="tblRegistration" EntitySet="tblRegistration" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
